@@ -3,17 +3,13 @@ package com.example.jetpack.compose
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.jetpack.compose.domain.model.Recipe
 import com.example.jetpack.compose.network.RecipeService
-import com.example.jetpack.compose.network.model.RecipeNetworkEntity
-import com.example.jetpack.compose.network.model.RecipeNetworkMapper
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
