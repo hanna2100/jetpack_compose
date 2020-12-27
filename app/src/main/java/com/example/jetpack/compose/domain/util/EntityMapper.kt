@@ -1,4 +1,4 @@
-package com.example.jetpack.compose.domain.model.util
+package com.example.jetpack.compose.domain.util
 
 interface EntityMapper<Entity, DomainModel> {
     fun mapFromEntity(entity: Entity): DomainModel

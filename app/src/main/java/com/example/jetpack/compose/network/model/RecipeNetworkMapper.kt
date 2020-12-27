@@ -1,7 +1,7 @@
 package com.example.jetpack.compose.network.model
 
 import com.example.jetpack.compose.domain.model.Recipe
-import com.example.jetpack.compose.domain.model.util.EntityMapper
+import com.example.jetpack.compose.domain.util.EntityMapper
 
 class RecipeNetworkMapper: EntityMapper<RecipeNetworkEntity, Recipe> {
     override fun mapFromEntity(entity: RecipeNetworkEntity): Recipe {
