@@ -1,8 +1,9 @@
-package com.example.jetpack.compose
+package com.example.jetpack.compose.presentation.ui
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.jetpack.compose.R
 import com.example.jetpack.compose.network.RecipeService
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
