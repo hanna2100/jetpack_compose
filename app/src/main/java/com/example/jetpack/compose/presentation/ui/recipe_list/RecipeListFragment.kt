@@ -19,11 +19,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.jetpack.compose.R
+import com.example.jetpack.compose.network.model.RecipeDtoMapper
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeListFragment: Fragment() {
-    val viewModel: RecipeListViewModel by activityViewModels()
+    val viewModel: RecipeListViewModel by viewModels()
+
+    @Inject
+    lateinit var mapper: RecipeDtoMapper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

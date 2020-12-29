@@ -3,6 +3,7 @@ package com.example.jetpack.compose.repository
 import com.example.jetpack.compose.domain.model.Recipe
 import com.example.jetpack.compose.network.RecipeService
 import com.example.jetpack.compose.network.model.RecipeDtoMapper
+import javax.inject.Inject
 
 class RecipeRepositoryImpl(
         private val service: RecipeService,
