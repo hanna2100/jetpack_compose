@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -31,6 +32,7 @@ import androidx.navigation.findNavController
 import androidx.ui.tooling.preview.Preview
 import com.example.jetpack.compose.R
 import com.example.jetpack.compose.network.model.RecipeDtoMapper
+import com.example.jetpack.compose.presentation.components.FoodCategoryChip
 import com.example.jetpack.compose.presentation.components.RecipeCard
 import com.example.jetpack.compose.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,12 +51,13 @@ class RecipeListFragment: Fragment() {
             setContent {
                 val recipes = viewModel.recipes.value
                 val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
 
                 Column {
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        color = MaterialTheme.colors.primary,
+                        color = Color.White,
                         elevation = 8.dp,
                     ) {
                         Column {
@@ -81,7 +84,7 @@ class RecipeListFragment: Fragment() {
                                     },
                                     onImeActionPerformed = { action, softKeyboardController ->
                                         if(action == ImeAction.Search) {
-                                            viewModel.newSearch(query)
+                                            viewModel.newSearch()
                                             softKeyboardController?.hideSoftwareKeyboard()
                                         }
                                     },
@@ -89,19 +92,27 @@ class RecipeListFragment: Fragment() {
                                     backgroundColor = MaterialTheme.colors.surface,
                                 )
                             }
-                            ScrollableRow(modifier = Modifier.fillMaxWidth()) {
+                            ScrollableRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp, bottom = 8.dp)
+                            ) {
                                 for(category in getAllFoodCategories()) {
-                                    Text(
-                                        text = category.value,
-                                        style = MaterialTheme.typography.body2,
-                                        color = MaterialTheme.colors.secondary,
-                                        modifier = Modifier.padding(8.dp)
+                                    FoodCategoryChip(
+                                        category = category.value,
+                                        isSelected = selectedCategory == category,
+                                        onSelectedCategoryChanged = {
+                                            viewModel.onSelectedCategoryChanged(it)
+                                        },
+                                        onExecuteSearch = viewModel::newSearch
                                     )
                                 }
                             }
                         }
                     }
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier.padding(8.dp)
+                    ) {
                         itemsIndexed(
                             items = recipes
                         ) { index, recipe ->
