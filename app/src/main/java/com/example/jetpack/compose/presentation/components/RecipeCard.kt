@@ -27,10 +27,7 @@ fun RecipeCard(
     Card (
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
-            .padding(
-                bottom = 6.dp,
-                top = 6.dp,
-            )
+            .padding(6.dp)
             .fillMaxWidth()
             .clickable(onClick = onClick),
         elevation = 8.dp,
