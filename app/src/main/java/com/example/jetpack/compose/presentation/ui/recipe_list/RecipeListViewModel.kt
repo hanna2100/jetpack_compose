@@ -22,6 +22,7 @@ constructor(
     val query = mutableStateOf("")
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
     var categoryScrollPosition: Float = 0f
+    val loading = mutableStateOf(false)
 
     init {
         newSearch()
@@ -29,13 +30,27 @@ constructor(
 
     fun newSearch() {
         viewModelScope.launch {
+            loading.value = true
+            resetSearchState()
             val result = recipeRepository.search(
                     token = token,
                     page = 1,
                     query = query.value,
             )
             recipes.value = result
+            loading.value= false
         }
+    }
+
+    private fun resetSearchState() {
+        recipes.value = listOf()
+        if(selectedCategory.value?.value != query.value) {
+            clearSelectedCategory()
+        }
+    }
+
+    private fun clearSelectedCategory() {
+        selectedCategory.value = null
     }
 
     fun onQueryChanged(query: String) {
