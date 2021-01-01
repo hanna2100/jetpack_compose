@@ -35,6 +35,7 @@ import com.example.jetpack.compose.R
 import com.example.jetpack.compose.network.model.RecipeDtoMapper
 import com.example.jetpack.compose.presentation.components.FoodCategoryChip
 import com.example.jetpack.compose.presentation.components.RecipeCard
+import com.example.jetpack.compose.presentation.components.SearchAppBar
 import com.example.jetpack.compose.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -53,68 +54,16 @@ class RecipeListFragment: Fragment() {
                 val recipes = viewModel.recipes.value
                 val query = viewModel.query.value
                 val selectedCategory = viewModel.selectedCategory.value
-
                 Column {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        color = Color.White,
-                        elevation = 8.dp,
-                    ) {
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                TextField (
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.9f)
-                                        .padding(8.dp),
-                                    value = query,
-                                    label = {
-                                        Text(text = "Search")
-                                    },
-                                    onValueChange = { newValue ->
-                                        viewModel.onQueryChanged(newValue)
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Text,
-                                        imeAction = ImeAction.Search
-                                    ),
-                                    leadingIcon = {
-                                        Icon(Icons.Filled.Search)
-                                    },
-                                    onImeActionPerformed = { action, softKeyboardController ->
-                                        if(action == ImeAction.Search) {
-                                            viewModel.newSearch()
-                                            softKeyboardController?.hideSoftwareKeyboard()
-                                        }
-                                    },
-                                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                                    backgroundColor = MaterialTheme.colors.surface,
-                                )
-                            }
-                            val scrollState = rememberScrollState()
-                            ScrollableRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 8.dp, bottom = 8.dp),
-                                scrollState = scrollState
-                            ) {
-                                scrollState.scrollTo(viewModel.categoryScrollPosition)
-                                for(category in getAllFoodCategories()) {
-                                    FoodCategoryChip(
-                                        category = category.value,
-                                        isSelected = selectedCategory == category,
-                                        onSelectedCategoryChanged = {
-                                            viewModel.onSelectedCategoryChanged(it)
-                                            viewModel.onChangedCategoryScrollPosition(scrollState.value)
-                                        },
-                                        onExecuteSearch = viewModel::newSearch
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    SearchAppBar(
+                        query = query,
+                        onQueryChanged = viewModel::onQueryChanged,
+                        onExecuteSearch = viewModel::newSearch,
+                        scrollPosition = viewModel.categoryScrollPosition,
+                        selectedCategory = selectedCategory,
+                        onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                        onChangedCategoryScrollPosition = viewModel::onChangedCategoryScrollPosition
+                    )
                     LazyColumn {
                         itemsIndexed(
                             items = recipes
