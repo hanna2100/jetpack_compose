@@ -33,9 +33,9 @@ constructor(
             loading.value = true
             resetSearchState()
             val result = recipeRepository.search(
-                    token = token,
-                    page = 1,
-                    query = query.value,
+                token = token,
+                page = 1,
+                query = query.value
             )
             recipes.value = result
             loading.value= false
