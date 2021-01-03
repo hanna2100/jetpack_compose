@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.jetpack.compose.R
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 const val DEFAULT_RECIPE_IMAGE = R.drawable.empty_plate
 
@@ -36,6 +37,28 @@ fun loadPicture(
     Glide.with(AmbientContext.current)
         .asBitmap()
         .load(url)
+        .into(object : CustomTarget<Bitmap>(){
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                bitmapState.value = resource
+            }
+            override fun onLoadCleared(placeholder: Drawable?) {
+            }
+
+        })
+
+    return bitmapState
+}
+
+@ExperimentalCoroutinesApi
+@Composable
+fun loadPicture(
+        @DrawableRes defaultImage: Int
+): MutableState<Bitmap?> {
+    val bitmapState: MutableState<Bitmap?> = mutableStateOf(null)
+
+    Glide.with(AmbientContext.current)
+        .asBitmap()
+        .load(defaultImage)
         .into(object : CustomTarget<Bitmap>(){
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                 bitmapState.value = resource
