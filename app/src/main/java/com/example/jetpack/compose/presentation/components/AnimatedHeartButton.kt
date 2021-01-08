@@ -2,10 +2,7 @@ package com.example.jetpack.compose.presentation.components
 
 import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.DpPropKey
-import androidx.compose.animation.core.TransitionState
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.transitionDefinition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.animation.transition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -102,7 +99,9 @@ object HeartAnimationDefinition {
         transition(
             HeartButtonState.IDLE to HeartButtonState.ACTIVE
         ) {
-            heartColor using tween(durationMillis = 500)
+            heartColor using tween(
+                durationMillis = 500
+            )
             heartSize using keyframes {
                 durationMillis = 500
                 contractedIconSize at 100
@@ -112,7 +111,9 @@ object HeartAnimationDefinition {
         transition(
                 HeartButtonState.ACTIVE to HeartButtonState.IDLE
         ) {
-            heartColor using tween(durationMillis = 500)
+            heartColor using tween(
+                durationMillis = 500
+            )
             heartSize using keyframes {
                 durationMillis = 500
                 expandedIconSize at 100
