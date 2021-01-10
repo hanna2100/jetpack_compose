@@ -50,26 +50,21 @@ class RecipeListFragment: Fragment() {
                         onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                         onChangedCategoryScrollPosition = viewModel::onChangedCategoryScrollPosition
                     )
-                    ShimmerRecipeCardItem(
-                        colors = listOf(
-                            Color.LightGray.copy(alpha = 0.9f),
-                            Color.LightGray.copy(alpha = 0.2f),
-                            Color.LightGray.copy(alpha = 0.9f)
-                        ),
-                        cardHeight = 250.dp
-                    )
-//                    Box(
-//                        modifier = Modifier.fillMaxWidth()
-//                    ) {
-//                        LazyColumn {
-//                            itemsIndexed(
-//                                items = recipes
-//                            ) { index, recipe ->
-//                                RecipeCard(recipe = recipe, onClick = { })
-//                            }
-//                        }
-//                        CircularIndeterminateProgressBar(isDisplayed = loading)
-//                    }
+//                    LoadingRecipeListShimmer(imageHeight = 250.dp)
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        if(loading) {
+                            LoadingRecipeListShimmer(imageHeight = 250.dp)
+                        } else {
+                            LazyColumn {
+                                itemsIndexed(
+                                        items = recipes
+                                ) { index, recipe ->
+                                    RecipeCard(recipe = recipe, onClick = { })
+                                }
+                            }
+                        }
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
+                    }
                 }
             }
         }

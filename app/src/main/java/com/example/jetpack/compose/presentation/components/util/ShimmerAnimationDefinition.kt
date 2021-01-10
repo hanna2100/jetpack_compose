@@ -4,9 +4,14 @@ import androidx.compose.animation.core.*
 import com.example.jetpack.compose.presentation.components.util.ShimmerAnimationDefinition.AnimationState.*
 
 class ShimmerAnimationDefinition(
-    val widthPx: Float,
-    val heightPx: Float
+    private val widthPx: Float,
+    private val heightPx: Float,
 ) {
+    var gradientWidth: Float
+
+    init {
+        gradientWidth = 0.2f * heightPx
+    }
     enum class AnimationState {
         START, END
     }
@@ -19,8 +24,8 @@ class ShimmerAnimationDefinition(
           this[yShimmerPropKey] = 0f
         }
         state(END) {
-          this[xShimmerPropKey] = widthPx
-          this[yShimmerPropKey] = heightPx
+          this[xShimmerPropKey] = widthPx + gradientWidth
+          this[yShimmerPropKey] = heightPx + gradientWidth
         }
 
         transition(START, END) {
