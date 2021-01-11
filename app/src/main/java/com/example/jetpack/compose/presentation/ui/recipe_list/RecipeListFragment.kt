@@ -23,10 +23,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.ui.tooling.preview.Preview
 import com.example.jetpack.compose.presentation.components.*
+import com.example.jetpack.compose.presentation.theme.AppTheme
+import com.example.jetpack.compose.presentation.ui.BaseApplication
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeListFragment: Fragment() {
+
+    @Inject
+    lateinit var application: BaseApplication
+
     private val viewModel: RecipeListViewModel by viewModels()
 
     override fun onCreateView(
@@ -34,36 +41,46 @@ class RecipeListFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return ComposeView(requireContext()).apply {
             setContent {
-                val recipes = viewModel.recipes.value
-                val query = viewModel.query.value
-                val selectedCategory = viewModel.selectedCategory.value
-                val loading = viewModel.loading.value
-                Column {
-                    SearchAppBar(
-                        query = query,
-                        onQueryChanged = viewModel::onQueryChanged,
-                        onExecuteSearch = viewModel::newSearch,
-                        scrollPosition = viewModel.categoryScrollPosition,
-                        selectedCategory = selectedCategory,
-                        onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
-                        onChangedCategoryScrollPosition = viewModel::onChangedCategoryScrollPosition
-                    )
+                AppTheme(darkTheme = application.isDark.value) {
+                    val recipes = viewModel.recipes.value
+                    val query = viewModel.query.value
+                    val selectedCategory = viewModel.selectedCategory.value
+                    val loading = viewModel.loading.value
+                    Column {
+                        SearchAppBar(
+                                query = query,
+                                onQueryChanged = viewModel::onQueryChanged,
+                                onExecuteSearch = viewModel::newSearch,
+                                scrollPosition = viewModel.categoryScrollPosition,
+                                selectedCategory = selectedCategory,
+                                onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                                onChangedCategoryScrollPosition = viewModel::onChangedCategoryScrollPosition,
+                                onToggleTheme = {
+                                    application.toggleLightTheme()
+                                }
+                        )
 //                    LoadingRecipeListShimmer(imageHeight = 250.dp)
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        if(loading) {
-                            LoadingRecipeListShimmer(imageHeight = 250.dp)
-                        } else {
-                            LazyColumn {
-                                itemsIndexed(
-                                        items = recipes
-                                ) { index, recipe ->
-                                    RecipeCard(recipe = recipe, onClick = { })
+                        Box(
+                                modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(color = MaterialTheme.colors.background)
+                        ) {
+                            if(loading) {
+                                LoadingRecipeListShimmer(imageHeight = 250.dp)
+                            } else {
+                                LazyColumn {
+                                    itemsIndexed(
+                                            items = recipes
+                                    ) { index, recipe ->
+                                        RecipeCard(recipe = recipe, onClick = { })
+                                    }
                                 }
                             }
+                            CircularIndeterminateProgressBar(isDisplayed = loading)
                         }
-                        CircularIndeterminateProgressBar(isDisplayed = loading)
                     }
                 }
             }
