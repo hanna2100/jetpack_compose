@@ -34,6 +34,7 @@ import com.example.jetpack.compose.presentation.components.*
 import com.example.jetpack.compose.presentation.components.util.SnackbarController
 import com.example.jetpack.compose.presentation.theme.AppTheme
 import com.example.jetpack.compose.presentation.ui.BaseApplication
+import com.example.jetpack.compose.presentation.ui.recipe_list.RecipeListEvent.*
 import com.example.jetpack.compose.util.PAGE_SIZE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -81,7 +82,7 @@ class RecipeListFragment : Fragment() {
                                             )
                                         }
                                     } else {
-                                        viewModel.newSearch()
+                                        viewModel.onTriggerEvent(NewSearchEvent)
                                     }
                                 },
                                 scrollPosition = viewModel.categoryScrollPosition,
@@ -118,7 +119,7 @@ class RecipeListFragment : Fragment() {
                                     ) { index, recipe ->
                                         viewModel.onChangeRecipeScrollPosition(index)
                                         if((index + 1) >= page * PAGE_SIZE && !loading) {
-                                            viewModel.nextPage()
+                                            viewModel.onTriggerEvent(NextPageEvent)
                                         }
                                         RecipeCard(recipe = recipe, onClick = { })
                                     }
