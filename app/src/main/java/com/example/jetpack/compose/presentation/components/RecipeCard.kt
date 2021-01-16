@@ -55,8 +55,7 @@ fun RecipeCard(
                         text = title,
                         modifier = Modifier
                                 .fillMaxWidth(0.85f)
-                                .wrapContentWidth(Alignment.Start)
-                        ,
+                                .wrapContentWidth(Alignment.Start),
                         style = MaterialTheme.typography.h3
                     )
                     val rank = recipe.rating.toString()
