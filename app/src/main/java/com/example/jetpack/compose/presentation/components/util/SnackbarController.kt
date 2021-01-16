@@ -1,6 +1,5 @@
 package com.example.jetpack.compose.presentation.components.util
 
-import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +16,7 @@ class SnackbarController (
     }
 
     fun getScope() = scope
+
     @ExperimentalMaterialApi
     fun showSnackbar(
         scaffoldState: ScaffoldState,

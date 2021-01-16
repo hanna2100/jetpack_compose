@@ -34,6 +34,7 @@ import com.example.jetpack.compose.presentation.components.*
 import com.example.jetpack.compose.presentation.components.util.SnackbarController
 import com.example.jetpack.compose.presentation.theme.AppTheme
 import com.example.jetpack.compose.presentation.ui.BaseApplication
+import com.example.jetpack.compose.util.PAGE_SIZE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,6 +63,7 @@ class RecipeListFragment : Fragment() {
                     val query = viewModel.query.value
                     val selectedCategory = viewModel.selectedCategory.value
                     val loading = viewModel.loading.value
+                    val page = viewModel.page.value
                     val scaffoldState = rememberScaffoldState()
 
                     Scaffold(
@@ -107,13 +109,17 @@ class RecipeListFragment : Fragment() {
                                 .fillMaxWidth()
                                 .background(color = MaterialTheme.colors.background)
                         ) {
-                            if (loading) {
+                            if (loading && recipes.isEmpty()) {
                                 LoadingRecipeListShimmer(imageHeight = 250.dp)
                             } else {
                                 LazyColumn {
                                     itemsIndexed(
                                         items = recipes
                                     ) { index, recipe ->
+                                        viewModel.onChangeRecipeScrollPosition(index)
+                                        if((index + 1) >= page * PAGE_SIZE && !loading) {
+                                            viewModel.nextPage()
+                                        }
                                         RecipeCard(recipe = recipe, onClick = { })
                                     }
                                 }
