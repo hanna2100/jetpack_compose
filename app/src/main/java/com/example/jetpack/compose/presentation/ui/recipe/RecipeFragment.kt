@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import com.example.jetpack.compose.presentation.ui.recipe.RecipeEvent.*
 import com.example.jetpack.compose.presentation.ui.recipe_list.RecipeListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -26,15 +28,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RecipeFragment: Fragment() {
 
+    private val viewModel: RecipeViewModel by viewModels()
+
     private var recipeId: MutableState<Int> = mutableStateOf(-1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CoroutineScope(Main).launch {
-            delay(1000)
-            arguments?.getInt("recipeId")?.let { rId ->
-                recipeId.value = rId
-            }
+        arguments?.getInt("recipeId")?.let { recipeId ->
+            viewModel.onTriggerEvent(GetRecipeEvent(recipeId))
         }
     }
 
@@ -42,16 +43,14 @@ class RecipeFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                val loading = viewModel.loading.value
+                val recipe = viewModel.recipe.value
                 Column (modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = if (recipeId.value != -1) {
-                            "Selected recipe id: ${recipeId.value}"
-                        } else {
-                            "Loading.."
-                        },
+                        text = recipe?.let { "selected recipe title = ${recipe.title}" }?: "Loading...",
                         style = TextStyle(
                             fontSize = TextUnit.Companion.Sp(21)
                         )
